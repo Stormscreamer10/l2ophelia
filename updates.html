@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L2 Ophelia | Updates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8c96a;
+  --gold-dim: #7a5e28;
+  --crimson: #8b1a1a;
+  --crimson-bright: #c0392b;
+  --dark: #080608;
+  --dark2: #0f0d10;
+  --panel: rgba(15,12,20,0.85);
+  --text: #d4c9b0;
+  --text-dim: #7a7060;
+  --border: rgba(201,168,76,0.2);
+  --border-bright: rgba(201,168,76,0.6);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 18px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(139,26,26,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(201,168,76,0.07) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(8,6,8,0.98), rgba(8,6,8,0.7));
+  border-bottom: 1px solid var(--border);
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-shadow: 0 0 20px rgba(201,168,76,0.4);
+}
+.nav-logo span { color: var(--crimson-bright); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--gold-light);
+  text-shadow: 0 0 12px rgba(201,168,76,0.5);
+}
+.page-header {
+  position: relative;
+  z-index: 1;
+  padding: 140px 5% 60px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.page-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+  margin-bottom: 1rem;
+  display: block;
+}
+.page-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(201,168,76,0.3);
+  letter-spacing: 0.08em;
+}
+.page-sub {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-top: 0.8rem;
+}
+.updates-container {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 5% 100px;
+}
+.update-month {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--crimson-bright);
+  margin: 3rem 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.update-month::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+.update-entry {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 2rem;
+  position: relative;
+}
+.update-entry + .update-entry { border-top: 1px solid rgba(201,168,76,0.06); }
+.update-date {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  padding: 1.5rem 0;
+  text-align: right;
+  letter-spacing: 0.05em;
+}
+.update-body {
+  padding: 1.5rem 0 1.5rem 2rem;
+  border-left: 1px solid var(--border);
+  position: relative;
+}
+.update-body::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 2rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold);
+}
+.update-body.dropnspoil::before { background: #1D9E75; border-color: #5DCAA5; }
+.update-body.spoilonly::before  { background: #185FA5; border-color: #85B7EB; }
+
+.tags { display: flex; gap: 6px; margin-bottom: 0.6rem; flex-wrap: wrap; }
+.update-tag {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border: 1px solid;
+}
+.tag-drop  { color: #5DCAA5; border-color: rgba(93,202,165,0.3); background: rgba(29,158,117,0.08); }
+.tag-spoil-green { color: #5DCAA5; border-color: rgba(93,202,165,0.3); background: rgba(29,158,117,0.08); }
+.tag-spoil-blue  { color: #85B7EB; border-color: rgba(133,183,235,0.3); background: rgba(24,95,165,0.08); }
+
+.update-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+.update-desc {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  font-style: italic;
+}
+.update-list {
+  list-style: none;
+  margin-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.update-list li {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  padding-left: 1rem;
+  position: relative;
+}
+.update-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gold-dim);
+  font-size: 0.7rem;
+}
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.footer-logo { font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 900; color: var(--gold-dim); letter-spacing: 0.12em; }
+.footer-copy { font-size: 0.8rem; color: var(--text-dim); font-style: italic; }
+.footer-disclaimer { font-size: 0.72rem; color: #3a3530; text-align: center; width: 100%; }
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .update-entry { grid-template-columns: 1fr; }
+  .update-date { padding: 1.5rem 0 0; text-align: left; }
+  .update-body { padding: 0.5rem 0 1.5rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">L2<span>·</span>OPHELIA</a>
+  <ul class="nav-links">
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="index.html#download">Connect</a></li>
+    <li><a href="index.html#vote">Vote</a></li>
+    <li><a href="updates.html" class="active">Updates</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <span class="page-eyebrow">Changelog</span>
+  <h1 class="page-title">Updates</h1>
+  <p class="page-sub">What changed, what was added, what you need to know.</p>
+</div>
+
+<div class="updates-container">
+
+  <div class="update-month">May 2025</div>
+
+  <div class="update-entry">
+    <div class="update-date">08 May</div>
+    <div class="update-body dropnspoil">
+      <div class="tags">
+        <span class="update-tag tag-drop">Drop</span>
+        <span class="update-tag tag-spoil-green">Spoil</span>
+      </div>
+      <p class="update-title">Tateossian Jewelry Recipes — Hellbound</p>
+      <p class="update-desc">Sealed Tateossian recipes now drop and can be spoiled from Hellbound monsters.</p>
+      <ul class="update-list">
+        <li>Desert Scorpion → Recipe: Sealed Tateossian Earring</li>
+        <li>Arcane Guardian → Recipe: Sealed Tateossian Ring</li>
+        <li>Arcane Watchman → Recipe: Sealed Tateossian Necklace</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="update-entry">
+    <div class="update-date">08 May</div>
+    <div class="update-body dropnspoil">
+      <div class="tags">
+        <span class="update-tag tag-drop">Drop</span>
+        <span class="update-tag tag-spoil-green">Spoil</span>
+      </div>
+      <p class="update-title">Draconic Leather Recipes — Hellbound</p>
+      <p class="update-desc">Sealed Draconic Leather recipes now drop and can be spoiled from Hellbound monsters.</p>
+      <ul class="update-list">
+        <li>Remnant Wraith → Recipe: Sealed Draconic Leather Armor</li>
+        <li>Blind Huntsman → Recipe: Sealed Draconic Leather Gloves</li>
+        <li>Blind Watchman → Recipe: Sealed Draconic Leather Boots</li>
+        <li>Sand Scorpion → Recipe: Sealed Draconic Leather Helmet</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="update-entry">
+    <div class="update-date">08 May</div>
+    <div class="update-body spoilonly">
+      <div class="tags">
+        <span class="update-tag tag-spoil-blue">Spoil</span>
+      </div>
+      <p class="update-title">Major Arcana Recipes — Varka &amp; Ketra</p>
+      <p class="update-desc">Sealed Major Arcana recipes can now be obtained via Spoil from Varka and Ketra monsters.</p>
+      <ul class="update-list">
+        <li>Varka Silenos General → Recipe: Sealed Major Arcana Robe</li>
+        <li>Varka's Prophet → Recipe: Sealed Major Arcana Gloves</li>
+        <li>Ketra Orc General → Recipe: Sealed Major Arcana Boots</li>
+        <li>Ketra Orc Grand Seer → Recipe: Sealed Major Arcana Circlet</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo">L2OPHELIA</span>
+  <span class="footer-copy">© 2025 L2 Ophelia Private Server</span>
+  <span class="footer-disclaimer">L2 Ophelia is a private fan server. Not affiliated with NCSoft or Ncsoft West.</span>
+</footer>
+
+<a href="https://l2.hopzone.net/site/vote/107298/1"><img src="https://l2.hopzone.net/assets/img/banners/vote_banners/banner_3.png" alt="Vote for L2OPHELIA.COM" style="border:0; position: fixed; z-index:99999; bottom: 0; right: 0; width:140px; height: 120px;"></a>
+<a href="https://topservers200.com/lineage2/3101/l2ophelia" target="_blank" style="position:fixed;z-index:99999;bottom:0;left:0; width:145px; height: 122px;"><img src="https://topservers200.com/images/banners/bottom-left.gif" width="145" height="122" alt="Lineage 2 private servers"></a>
+
+</body>
+</html>
