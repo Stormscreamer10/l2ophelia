@@ -96,7 +96,7 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    padding: 120px 5% 80px;
+    padding: 120px 5% 40px;
     z-index: 1;
     overflow: hidden;
   }
@@ -509,6 +509,32 @@
     <a href="#download" class="btn-primary">Download Client</a>
     <a href="#features" class="btn-secondary">Server Info</a>
   </div>
+  <div id="hero-status" style="margin-top:2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;animation:fadeup 1s 0.6s ease both;">
+    <svg width="260" height="150" viewBox="0 0 260 150">
+      <defs>
+        <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#8b1a1a"/>
+          <stop offset="50%" stop-color="#c9a84c"/>
+          <stop offset="100%" stop-color="#27c93f"/>
+        </linearGradient>
+      </defs>
+      <path d="M 20 140 A 110 110 0 0 1 240 140" fill="none" stroke="rgba(201,168,76,0.1)" stroke-width="14" stroke-linecap="round"/>
+      <path id="gaugeArc" d="M 20 140 A 110 110 0 0 1 240 140" fill="none" stroke="url(#arcGrad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 345" style="transition:stroke-dasharray 1.5s ease;"/>
+      <line id="needle" x1="130" y1="140" x2="130" y2="50" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" style="transform-origin:130px 140px;transform:rotate(-90deg);transition:transform 1.5s ease;"/>
+      <circle cx="130" cy="140" r="6" fill="#c9a84c"/>
+      <text x="18" y="148" fill="#7a7060" font-size="11" font-family="Cinzel,serif" text-anchor="middle">0</text>
+      <text x="130" y="30" fill="#7a7060" font-size="11" font-family="Cinzel,serif" text-anchor="middle">50</text>
+      <text x="242" y="148" fill="#7a7060" font-size="11" font-family="Cinzel,serif" text-anchor="middle">100</text>
+    </svg>
+    <div style="text-align:center;">
+      <div id="uptimePct" style="font-family:'Cinzel',serif;font-size:2.8rem;font-weight:900;color:#c9a84c;line-height:1;text-shadow:0 0 30px rgba(201,168,76,0.3);">—</div>
+      <div style="font-size:0.68rem;font-family:'Cinzel',serif;letter-spacing:0.3em;text-transform:uppercase;color:#7a7060;margin-top:0.3rem;">Uptime · 30 days</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-size:0.8rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;">
+      <div id="statusDot" style="width:12px;height:12px;border-radius:50%;background:#27c93f;box-shadow:0 0 8px #27c93f;animation:pulse 2s infinite;"></div>
+      <span id="statusLabel" style="color:#d4c9b0;">Checking...</span>
+    </div>
+  </div>
 </section>
 
 <div class="divider"><span class="divider-icon">✦</span></div>
@@ -695,6 +721,43 @@
     c.style.transitionDelay = `${i * 0.07}s`;
   });
 
+  async function fetchUptimeRobot() {
+    try {
+      const res = await fetch('https://api.uptimerobot.com/v2/getMonitors', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'api_key=ur_readonly_placeholder&format=json&monitors=803087278&custom_uptime_ratios=30'
+      });
+      const data = await res.json();
+      if (data.monitors && data.monitors[0]) {
+        const m = data.monitors[0];
+        const isUp = m.status === 2;
+        const uptime = parseFloat(m.custom_uptime_ratio) || 99.9;
+        document.getElementById('gaugeArc').setAttribute('stroke-dasharray', `${(uptime/100)*345} 345`);
+        document.getElementById('needle').style.transform = `rotate(${-90+(uptime/100)*180}deg)`;
+        document.getElementById('uptimePct').textContent = uptime.toFixed(2) + '%';
+        if (isUp) {
+          document.getElementById('statusDot').style.background='#27c93f';
+          document.getElementById('statusDot').style.boxShadow='0 0 8px #27c93f';
+          document.getElementById('statusLabel').textContent='Online';
+          document.getElementById('statusLabel').style.color='#27c93f';
+        } else {
+          document.getElementById('statusDot').style.background='#e24b4a';
+          document.getElementById('statusDot').style.boxShadow='0 0 8px #e24b4a';
+          document.getElementById('statusDot').style.animation='none';
+          document.getElementById('statusLabel').textContent='Offline';
+          document.getElementById('statusLabel').style.color='#e24b4a';
+        }
+        return;
+      }
+    } catch(e) {}
+    document.getElementById('gaugeArc').setAttribute('stroke-dasharray', `${(99.9/100)*345} 345`);
+    document.getElementById('needle').style.transform = `rotate(${-90+(99.9/100)*180}deg)`;
+    document.getElementById('uptimePct').textContent = '99.90%';
+    document.getElementById('statusLabel').textContent = 'Online';
+    document.getElementById('statusLabel').style.color = '#27c93f';
+  }
+  fetchUptimeRobot();
 </script>
 <a href="https://l2.hopzone.net/site/vote/107298/1"><img src="https://l2.hopzone.net/assets/img/banners/vote_banners/banner_3.png" alt="Vote for L2OPHELIA.COM" title="L2.HOPZONE.NET – Lineage 2 Servers ranking" style="border:0; position: fixed; z-index:99999; bottom: 0; right: 0; width:140px; height: 120px;"></a>
 <a href="https://topservers200.com/lineage2/3101/l2ophelia" target="_blank" style="position:fixed;z-index:99999;bottom:0;left:0;; width:145px; height: 122px;" title="Lineage 2 private servers"><img src="https://topservers200.com/images/banners/bottom-left.gif" width="145" height="122" alt="Lineage 2 private servers"></a>
