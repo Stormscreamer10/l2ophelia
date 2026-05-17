@@ -739,13 +739,13 @@
         if (isUp) {
           document.getElementById('statusDot').style.background='#27c93f';
           document.getElementById('statusDot').style.boxShadow='0 0 8px #27c93f';
-          document.getElementById('statusLabel').textContent='Online';
+          document.getElementById('statusLabel').textContent='Server Status: Online';
           document.getElementById('statusLabel').style.color='#27c93f';
         } else {
           document.getElementById('statusDot').style.background='#e24b4a';
           document.getElementById('statusDot').style.boxShadow='0 0 8px #e24b4a';
           document.getElementById('statusDot').style.animation='none';
-          document.getElementById('statusLabel').textContent='Offline';
+          document.getElementById('statusLabel').textContent='Server Status: Offline';
           document.getElementById('statusLabel').style.color='#e24b4a';
         }
         return;
@@ -754,7 +754,7 @@
     document.getElementById('gaugeArc').setAttribute('stroke-dasharray', `${(99.9/100)*345} 345`);
     document.getElementById('needle').style.transform = `rotate(${-90+(99.9/100)*180}deg)`;
     document.getElementById('uptimePct').textContent = '99.90%';
-    document.getElementById('statusLabel').textContent = 'Online';
+    document.getElementById('statusLabel').textContent='Server Status: Online';
     document.getElementById('statusLabel').style.color = '#27c93f';
   }
   fetchUptimeRobot();
